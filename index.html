@@ -349,34 +349,118 @@
         window.open(link, '_blank');
     }
 
-    function generatePDF() {
+        function generatePDF() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'pt', 'a4');
+        const doc = new jsPDF('p', 'pt', 'a4'); // 'p' = Portrait (Vertical)
         
-        doc.setFontSize(20); doc.setTextColor(30, 58, 138);
-        doc.text("HAKIMI WALLPAPER PUNE", 40, 50);
+        // 1. BRAND HEADER
+        doc.setFillColor(30, 58, 138); // Navy Blue Header
+        doc.rect(0, 0, 595, 80, 'F');
         
-        doc.setFontSize(10); doc.setTextColor(0);
-        doc.text(`Customer: ${document.getElementById('custName').value}`, 40, 80);
-        doc.text(`Total Amount: ${document.getElementById('grandTotal').innerText}`, 40, 95);
+        doc.setFontSize(22); doc.setTextColor(255, 255, 255);
+        doc.text("HAKIMI WALLPAPER PUNE", 297, 40, { align: "center" });
+        
+        doc.setFontSize(10); doc.setTextColor(220, 220, 220);
+        doc.text("Contact: +91 95032 19051 | Pune, Maharashtra", 297, 60, { align: "center" });
 
+        // 2. CUSTOMER DETAILS
+        const cName = document.getElementById('custName').value || "Guest";
+        const cPhone = document.getElementById('custPhone').value || "";
+        const cDate = document.getElementById('currentDate').value;
+        const cSite = document.getElementById('custSite').value || "";
+
+        doc.setTextColor(0, 0, 0); doc.setFontSize(10);
+        doc.text(`Customer: ${cName}`, 40, 110);
+        doc.text(`Phone: ${cPhone}`, 40, 125);
+        
+        doc.text(`Date: ${cDate}`, 400, 110);
+        doc.text(`Site: ${cSite}`, 400, 125);
+
+        // 3. TABLE DATA PREPARATION
         const body = [];
         document.querySelectorAll('.item-row').forEach(row => {
+            let h = row.querySelector('.val-h').value;
+            let w = row.querySelector('.val-w').value;
+            let tName = row.querySelector('.track-name').value;
+            let tRate = row.querySelector('.track-rate').value;
+            
+            // Smart Columns: Combine HxW and Track Info to save space
+            let sizeStr = (h && w) ? `${h}" x ${w}"` : "-";
+            let trackStr = (tRate > 0) ? `${tName} (@${tRate})` : "-";
+            let fabric = row.querySelector('.val-fabric').value || "-";
+            let space = row.querySelector('td:nth-child(2) select').value;
+            
             body.push([
-                row.querySelector('td:nth-child(2) select').value,
-                row.querySelector('.val-fabric').value,
+                space,
+                sizeStr,
+                fabric,
+                row.querySelector('.stitch-type').value,
+                trackStr,
+                row.querySelector('.mtr').value,
+                row.querySelector('.rate').value,
                 row.querySelector('.rowTotal').innerText
             ]);
         });
 
+        // 4. GENERATE TABLE
         doc.autoTable({
-            startY: 120,
-            head: [['Room', 'Fabric', 'Cost']],
-            body: body
+            startY: 140,
+            head: [['Room', 'Size', 'Fabric', 'Stitch', 'Hardware', 'Mtr', 'Rate', 'Total']],
+            body: body,
+            theme: 'striped',
+            headStyles: { fillColor: [30, 58, 138], textColor: 255 },
+            styles: { fontSize: 8, cellPadding: 4, valign: 'middle', halign: 'center' },
+            columnStyles: {
+                0: { halign: 'left', cellWidth: 70 }, // Room
+                2: { halign: 'left', cellWidth: 80 }  // Fabric
+            }
         });
+
+        // 5. SUMMARY SECTION (Bottom of Page)
+        let finalY = doc.lastAutoTable.finalY + 20;
         
-        doc.save('quotation.pdf');
+        // Prevent writing off the page
+        if (finalY > 700) { doc.addPage(); finalY = 40; }
+
+        // Draw Summary Box
+        doc.setDrawColor(200); doc.setFillColor(248, 250, 252);
+        doc.roundedRect(300, finalY, 250, 160, 3, 3, 'FD'); // Gray Box
+
+        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.setTextColor(30, 58, 138);
+        doc.text("Quotation Summary", 315, finalY + 20);
+
+        doc.setFontSize(9); doc.setFont(undefined, 'normal'); doc.setTextColor(50);
+        let y = finalY + 40;
+        
+        // Helper to draw a row
+        function drawRow(label, value, isBold = false) {
+            doc.setFont(undefined, isBold ? 'bold' : 'normal');
+            doc.text(label, 315, y);
+            doc.text(value, 535, y, { align: 'right' });
+            y += 15;
+        }
+
+        drawRow("Total Fabric Cost:", document.getElementById('summ_fabric').innerText);
+        drawRow("Making Charges:", document.getElementById('summ_roman_cost').innerText);
+        drawRow("Hardware & Track:", document.getElementById('summ_hardware').innerText);
+        drawRow("Stitching/Tailoring:", document.getElementById('summ_tailor').innerText);
+        drawRow("Installation & Transport:", document.getElementById('box2Total').innerText); // Simplified service total
+        
+        // LINE
+        doc.setDrawColor(200); doc.line(315, y-5, 535, y-5);
+        y += 5;
+
+        // GRAND TOTAL
+        doc.setFontSize(12); doc.setTextColor(0);
+        drawRow("Grand Total:", "Rs. " + document.getElementById('grandTotal').innerText, true);
+        
+        doc.setFontSize(10); doc.setTextColor(220, 53, 69); // Red color for Balance
+        drawRow("Balance Due:", "Rs. " + document.getElementById('balance').innerText, true);
+
+        // 6. SAVE
+        doc.save(`Hakimi_Quote_${cName || 'New'}.pdf`);
     }
+
 
     // Init
     addRow();
