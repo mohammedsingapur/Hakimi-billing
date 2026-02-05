@@ -3,44 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hakimi Wallpaper - Fixed Summary</title>
+    <title>Hakimi Wallpaper - Quote v6.0</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     
     <style>
-        body { font-family: sans-serif; background: #f4f7f6; padding: 10px; margin: 0; }
-        .container { max-width: 1400px; margin: auto; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
-        /* Header & Customer - UNTOUCHED */
-        .header { text-align: center; border-bottom: 3px solid #2c3e50; padding-bottom: 10px; margin-bottom: 20px; }
-        .header h1 { margin: 0; color: #2c3e50; font-size: 22px; text-transform: uppercase; }
+        :root { 
+            --primary: #1e3a8a; /* Navy Blue */
+            --bg: #f3f4f6; 
+            --white: #ffffff;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
         
-        .customer-section { background: #eef2f5; padding: 15px; border-radius: 6px; margin-bottom: 20px; border-left: 4px solid #3498db; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); padding: 10px; margin: 0; color: #333; }
+        .container { max-width: 1400px; margin: auto; background: var(--white); padding: 15px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+
+        /* HEADER & CUSTOMER */
+        .header { text-align: center; border-bottom: 4px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+        .header h1 { margin: 0; color: var(--primary); font-size: 22px; text-transform: uppercase; }
+        .customer-section { background: #eff6ff; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--primary); }
         .info-group { margin-bottom: 10px; }
-        .info-group label { display: block; font-weight: bold; font-size: 12px; color: #555; }
-        .info-group input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .info-group label { display: block; font-weight: 600; font-size: 12px; color: #555; margin-bottom: 4px; }
+        .info-group input { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 16px; box-sizing: border-box; }
 
-        /* Table - RESTORED TO ORIGINAL */
+        /* TABLE & INPUTS */
         .table-wrapper { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px; min-width: 1100px; }
-        th { background: #2c3e50; color: white; padding: 10px 5px; font-size: 11px; text-transform: uppercase; }
-        td { border-bottom: 1px solid #ddd; padding: 8px 4px; text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 13px; min-width: 1000px; }
+        th { background: var(--primary); color: white; padding: 12px 5px; font-size: 11px; text-transform: uppercase; }
+        td { border-bottom: 1px solid var(--border); padding: 8px 4px; text-align: center; vertical-align: middle; }
         
-        input, select { width: 90%; padding: 6px; border: 1px solid #ccc; text-align: center; border-radius: 4px; }
-        .auto-field { background: #e3f2fd; font-weight: bold; border: none; }
+        input, select { width: 90%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; text-align: center; font-size: 14px; }
+        .auto-field { background: #e0f2fe !important; font-weight: bold; color: var(--primary); border: none !important; }
         
-        /* Buttons */
-        .controls { display: flex; gap: 10px; margin: 20px 0; }
-        button { flex: 1; padding: 12px; font-weight: bold; border-radius: 6px; border: none; color: white; cursor: pointer; }
-        .btn-add { background: #27ae60; } .btn-pdf { background: #2980b9; } .btn-wa { background: #25D366; }
+        /* Checkbox Style */
+        .aster-wrapper { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; }
+        input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; }
 
-        /* --- NEW SUMMARY CSS (The Only Change) --- */
+        /* MOBILE CARD VIEW */
+        @media screen and (max-width: 1000px) {
+            table, tbody { display: block; width: 100%; min-width: 0 !important; }
+            thead { display: none; }
+            .item-row { display: block; background: white; border: 2px solid var(--border); margin-bottom: 15px; padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+            .item-row td { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f1f5f9; text-align: right; }
+            .item-row td:last-child { border-bottom: none; }
+            .item-row td::before { content: attr(data-label); font-weight: 700; color: #64748b; font-size: 12px; text-transform: uppercase; text-align: left; width: 45%; }
+            .item-row input, .item-row select, .track-inputs { width: 50% !important; }
+            .action-cell { flex-direction: row; justify-content: flex-end; gap: 10px; }
+            .action-cell::before { display: none; }
+        }
+
+        /* BUTTONS */
+        .controls { display: flex; flex-direction: column; gap: 10px; margin: 20px 0; }
+        button { width: 100%; padding: 15px; font-weight: bold; border-radius: 8px; border: none; font-size: 16px; color: white; cursor: pointer; }
+        .btn-add { background: var(--success); }
+        .btn-pdf { background: var(--primary); }
+        .btn-whatsapp { background: #25D366; }
+        .btn-icon { width: 35px; height: 35px; border-radius: 5px; font-size: 18px; padding: 0; margin-left: 5px; }
+        .btn-copy { background: #3b82f6; } .btn-del { background: var(--danger); }
+
+        /* DETAILED SUMMARY LAYOUT */
         .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
-        .summary-box { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .summary-box h3 { margin: 0 0 10px 0; color: #2c3e50; border-bottom: 2px solid #f1c40f; padding-bottom: 5px; font-size: 16px; }
-        .summary-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f9f9f9; font-size: 14px; }
-        .summary-row strong { color: #000; }
-        .grand-total { font-size: 1.4em; color: #2c3e50; font-weight: 800; border-top: 2px solid #333; margin-top: 10px; padding-top: 10px; }
+        .summary-box { background: white; padding: 20px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+        .summary-box h3 { margin: 0 0 15px 0; color: var(--primary); border-bottom: 2px solid #fbbf24; padding-bottom: 5px; font-size: 16px; }
+        
+        .summary-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; color: #444; }
+        .summary-row span:last-child { font-weight: 600; color: #000; }
+        
+        .total-highlight { font-size: 1.2em; color: var(--danger); font-weight: 800; border-top: 2px solid #ccc; margin-top: 10px; padding-top: 10px; }
+        .balance-row { color: var(--success); font-weight: bold; font-size: 1.1em; }
     </style>
 </head>
 <body>
@@ -52,70 +84,72 @@
     </div>
 
     <div class="customer-section">
-        <div class="info-group"><label>Customer Name</label><input type="text" id="custName"></div>
-        <div class="info-group"><label>Phone Number</label><input type="tel" id="custPhone"></div>
+        <div class="info-group"><label>Customer Name</label><input type="text" id="custName" placeholder="Enter Name"></div>
+        <div class="info-group"><label>Phone Number</label><input type="tel" id="custPhone" placeholder="Enter Phone"></div>
         <div class="info-group"><label>Date</label><input type="date" id="currentDate"></div>
-        <div class="info-group"><label>Site / Address</label><input type="text" id="custSite"></div>
+        <div class="info-group"><label>Site / Address</label><input type="text" id="custSite" placeholder="Enter Site"></div>
     </div>
 
     <div class="table-wrapper">
         <table id="mainTable">
             <thead>
                 <tr>
-                    <th style="width:5%">Del</th>
-                    <th style="width:12%">Space</th><th style="width:10%">Stitch</th>
-                    <th style="width:6%">H</th><th style="width:6%">W</th>
-                    <th style="width:6%">P/Sqft</th><th style="width:12%">Fabric</th>
-                    <th style="width:5%">Aster</th><th style="width:12%">Track Name</th>
-                    <th style="width:6%">Tr. Rate</th>
-                    <th style="width:6%">Mtr</th><th style="width:7%">Rate</th>
-                    <th style="width:6%">Disc%</th><th style="width:8%">Total</th>
+                    <th style="width:6%">Act</th>
+                    <th style="width:10%">Space</th>
+                    <th style="width:10%">Stitch</th>
+                    <th style="width:6%">H</th>
+                    <th style="width:6%">W</th>
+                    <th style="width:6%">P/Sqft</th>
+                    <th style="width:12%">Fabric</th>
+                    <th style="width:5%">Aster</th>
+                    <th style="width:12%">Track Info</th>
+                    <th style="width:6%">Mtr</th>
+                    <th style="width:7%">Rate</th>
+                    <th style="width:6%">Disc%</th>
+                    <th style="width:8%">Total</th>
                 </tr>
             </thead>
             <tbody id="items"></tbody>
         </table>
+        <div id="emptyMsg" style="text-align:center; padding:20px; color:#999; display:none;">No items added.</div>
     </div>
 
     <div class="controls">
         <button class="btn-add" onclick="addRow()">+ Add New Item</button>
-        <button class="btn-pdf" onclick="generatePDF()">Download PDF</button>
-        <button class="btn-wa" onclick="openWA()">WhatsApp</button>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-pdf" onclick="generatePDF()">📄 Download PDF</button>
+            <button class="btn-whatsapp" onclick="openWA()">💬 WhatsApp</button>
+        </div>
     </div>
 
     <div class="summary-grid">
         <div class="summary-box">
-            <h3>Box 1: Product Summary</h3>
-            <div class="summary-row"><span>Total Fabric Cost:</span> <span id="summ_fabric">0.00</span></div>
+            <h3>Product Summary</h3>
+            <div class="summary-row"><span>Total Fabric:</span> <span id="summ_fabric">0.00</span></div>
             <div class="summary-row"><span>Roman (<span id="summ_roman_sqft">0</span> Sqft):</span> <span id="summ_roman_cost">0.00</span></div>
             <div class="summary-row"><span>Roller/Zebra:</span> <span id="summ_roller">0.00</span></div>
-            <div class="summary-row"><span>Tailoring:</span> <span id="summ_tailor">0.00</span></div>
-            <div class="summary-row"><span>Aster (Lining):</span> <span id="summ_aster">0.00</span></div>
+            <div class="summary-row"><span>Tailoring (P x 150):</span> <span id="summ_tailor">0.00</span></div>
+            <div class="summary-row"><span>Aster (Lining x 200):</span> <span id="summ_aster">0.00</span></div>
+            <div class="summary-row total-highlight"><span>Product Total:</span> <span id="box1Total">0.00</span></div>
             
-            <div class="summary-row" style="font-weight:bold; color:#2980b9; margin-top:5px;">
-                <span>Product Total:</span> <span id="box1Total">0.00</span>
-            </div>
-            
-            <div class="summary-row" style="margin-top:15px; align-items:center;">
+            <div class="summary-row" style="margin-top:15px; align-items:center; background:#f0f9ff; padding:10px;">
                 <span>Advance Paid:</span> 
                 <input type="number" id="advance" oninput="calculateAll()" value="0" style="width:80px; text-align:right;">
             </div>
-            <div class="summary-row" style="color:#c0392b; font-weight:bold;">
+            <div class="summary-row balance-row" style="padding:10px;">
                 <span>Balance Due:</span> <span id="balance">0.00</span>
             </div>
         </div>
 
         <div class="summary-box">
-            <h3>Box 2: Services & Hardware</h3>
-            <div class="summary-row"><span>Hardware (Track):</span> <span id="summ_hardware">0.00</span></div>
+            <h3>Services & Hardware</h3>
+            <div class="summary-row"><span>Hardware Total:</span> <span id="summ_hardware">0.00</span></div>
             <div class="summary-row"><span>Installation (<span id="summ_items">0</span> Items):</span> <span id="summ_install">0.00</span></div>
-            <div class="summary-row"><span>Transport:</span> <span>300.00</span></div>
+            <div class="summary-row"><span>Local Transport:</span> <span>300.00</span></div>
+            <div class="summary-row total-highlight"><span>Services Total:</span> <span id="box2Total">0.00</span></div>
             
-            <div class="summary-row" style="font-weight:bold; color:#2980b9; margin-top:5px;">
-                <span>Services Total:</span> <span id="box2Total">0.00</span>
-            </div>
-
-            <div class="summary-row grand-total">
-                <span>GRAND TOTAL:</span> <span id="grandTotal">0.00</span>
+            <div class="summary-row" style="margin-top:20px; border:none; font-size:1.4em; color:var(--primary);">
+                <span>Grand Total:</span> <span id="grandTotal">0.00</span>
             </div>
         </div>
     </div>
@@ -124,35 +158,55 @@
 <script>
     document.getElementById('currentDate').valueAsDate = new Date();
 
-    // RESTORED Add Row Function (Fixed)
-    function createRowHTML() {
+    function createRowHTML(data = {}) {
         return `
-            <td><button style="background:#e74c3c; padding:5px; width:100%;" onclick="removeRow(this)">X</button></td>
-            <td>
-                <select class="space-sel" onchange="calculateAll()">
-                    <option>Living room</option><option>Master bedroom</option>
-                    <option>Kids bedroom</option><option>Guest room</option><option>Other</option>
+            <td data-label="Actions" class="action-cell">
+                <button class="btn-icon btn-copy" onclick="cloneRow(this)">📄</button>
+                <button class="btn-icon btn-del" onclick="removeRow(this)">🗑️</button>
+            </td>
+            <td data-label="Space">
+                <select onchange="calculateAll()">
+                    <option ${data.space=='Living room'?'selected':''}>Living room</option>
+                    <option ${data.space=='Master bedroom'?'selected':''}>Master bedroom</option>
+                    <option ${data.space=='Kids bedroom'?'selected':''}>Kids bedroom</option>
+                    <option ${data.space=='Bedroom'?'selected':''}>Bedroom</option>
+                    <option ${data.space=='Guest room'?'selected':''}>Guest room</option>
+                    <option ${data.space=='Other'?'selected':''}>Other</option>
                 </select>
             </td>
-            <td>
-                <select class="stitch-sel" onchange="calculateAll()">
-                    <option value="none">Select</option><option value="american">American</option>
-                    <option value="roman">Roman</option><option value="roller">Roller/Zebra</option>
+            <td data-label="Stitch">
+                <select class="stitch-type" onchange="calculateAll()">
+                    <option value="none" ${data.stitch=='none'?'selected':''}>Select</option>
+                    <option value="american" ${data.stitch=='american'?'selected':''}>American</option>
+                    <option value="roman" ${data.stitch=='roman'?'selected':''}>Roman</option>
+                    <option value="french" ${data.stitch=='french'?'selected':''}>French</option>
+                    <option value="ring" ${data.stitch=='ring'?'selected':''}>Ring</option>
+                    <option value="roller" ${data.stitch=='roller'?'selected':''}>Roller/Zebra</option>
                 </select>
             </td>
-            <td><input type="number" class="val-h" oninput="calculateAll()"></td>
-            <td><input type="number" class="val-w" oninput="calculateAll()"></td>
-            <td><input type="number" class="val-p auto-field" readonly></td>
-            <td><input type="text" class="val-fabric" oninput="saveData()"></td>
-            <td><input type="checkbox" class="aster-check" onchange="calculateAll()"></td>
+            <td data-label="Height"><input type="number" class="val-h" oninput="calculateAll()" value="${data.h||''}" placeholder="H"></td>
+            <td data-label="Width"><input type="number" class="val-w" oninput="calculateAll()" value="${data.w||''}" placeholder="W"></td>
+            <td data-label="P / Sqft"><input type="number" class="val-p auto-field" readonly value="${data.p||''}"></td>
+            <td data-label="Fabric"><input type="text" class="val-fabric" value="${data.fabric||''}" placeholder="Name"></td>
             
-            <td><input type="text" class="track-name" oninput="saveData()"></td>
-            <td><input type="number" class="track-rate" oninput="calculateAll()"></td>
+            <td data-label="Aster (Lining)">
+                <div class="aster-wrapper">
+                    <input type="checkbox" class="aster-check" onchange="calculateAll()" ${data.aster?'checked':''}>
+                    <span>Add</span>
+                </div>
+            </td>
+
+            <td data-label="Track Info">
+                <div style="display:flex; gap:5px;">
+                    <input type="text" class="track-name" placeholder="Name" value="${data.trackName||''}">
+                    <input type="number" class="track-rate" placeholder="Rate" value="${data.trackRate||''}" oninput="calculateAll()">
+                </div>
+            </td>
             
-            <td><input type="number" class="mtr auto-field" readonly></td>
-            <td><input type="number" class="rate" oninput="calculateAll()"></td>
-            <td><input type="number" class="disc" oninput="calculateAll()" value="0"></td>
-            <td><strong><span class="rowTotal">0.00</span></strong></td>
+            <td data-label="Mtr"><input type="number" class="mtr auto-field" readonly value="${data.mtr||''}"></td>
+            <td data-label="Rate"><input type="number" class="rate" oninput="calculateAll()" value="${data.rate||''}"></td>
+            <td data-label="Disc %"><input type="number" class="disc" oninput="calculateAll()" value="${data.disc||''}" placeholder="%"></td>
+            <td data-label="Total"><strong><span class="rowTotal">${data.total||'0.00'}</span></strong></td>
         `;
     }
 
@@ -161,214 +215,239 @@
         tr.className = 'item-row';
         tr.innerHTML = createRowHTML();
         document.getElementById('items').appendChild(tr);
+        document.getElementById('emptyMsg').style.display = 'none';
     }
 
     function removeRow(btn) {
-        btn.closest('tr').remove();
+        const row = btn.closest('tr');
+        row.remove();
         calculateAll();
     }
 
-    // UPDATED Calculation Logic for Split Summary
+    function cloneRow(btn) {
+        const row = btn.closest('tr');
+        const data = {
+            space: row.querySelector('td:nth-child(2) select').value,
+            stitch: row.querySelector('.stitch-type').value,
+            h: row.querySelector('.val-h').value,
+            w: row.querySelector('.val-w').value,
+            fabric: "", 
+            rate: "",
+            trackName: row.querySelector('.track-name').value,
+            trackRate: row.querySelector('.track-rate').value,
+            disc: row.querySelector('.disc').value,
+            aster: row.querySelector('.aster-check').checked
+        };
+        const newRow = document.createElement('tr');
+        newRow.className = 'item-row';
+        newRow.innerHTML = createRowHTML(data);
+        row.parentNode.insertBefore(newRow, row.nextSibling);
+        calculateAll();
+    }
+
     function calculateAll() {
         let fabCost=0, romanCost=0, rollerCost=0, tailorCost=0, asterCost=0, hwCost=0;
         let romanSqft=0, itemCount=0;
 
         document.querySelectorAll('.item-row').forEach(row => {
             itemCount++;
-            const stitch = row.querySelector('.stitch-sel').value;
+            const stitch = row.querySelector('.stitch-type').value;
             const h = parseFloat(row.querySelector('.val-h').value) || 0;
             const w = parseFloat(row.querySelector('.val-w').value) || 0;
             const rate = parseFloat(row.querySelector('.rate').value) || 0;
             const disc = parseFloat(row.querySelector('.disc').value) || 0;
-            const trackRate = parseFloat(row.querySelector('.track-rate').value) || 0;
             const aster = row.querySelector('.aster-check').checked;
+            const trackRate = parseFloat(row.querySelector('.track-rate').value) || 0;
             
-            let p=0, mtr=0, rowTot=0, sqft=Math.ceil((h*w)/144);
+            let p=0, mtr=0, rowTot=0, sqft=0;
 
             if (h>0 && w>0) {
+                // UPDATE: Round Up Sqft
+                sqft = Math.ceil((h*w)/144);
+
+                // 1. CALCULATE MTR & PLEATS
                 if (stitch === 'american') p = Math.ceil(w/24);
                 else if (stitch === 'roman') p = Math.ceil(w/46);
+                else if (stitch === 'french') p = Math.ceil(w/19);
+                else if (stitch === 'ring') p = Math.ceil(w/30);
                 
                 if (stitch === 'roman') {
+                    // UPDATE: Round Up Meter
                     mtr = Math.ceil(((h+15)/39)*p);
                     rowTot = (mtr*rate) * (1 - disc/100);
+                    
                     romanSqft += sqft;
                     romanCost += (sqft * 160); 
-                } else if (stitch === 'roller') {
+                } 
+                else if (stitch === 'roller') {
+                    // UPDATE: Round Up Roller Sqft
                     p = Math.ceil(Math.max(11, ((h+6)*w)/144)); 
                     rowTot = (p*rate) * (1 - disc/100);
                     rollerCost += rowTot; 
-                } else if (stitch !== 'none') {
+                } 
+                else if (stitch !== 'none') {
+                    // UPDATE: Round Up Meter
                     mtr = Math.ceil(((h+15)/39)*p);
                     rowTot = (mtr*rate) * (1 - disc/100);
                     tailorCost += (p * 150); 
                 }
             }
 
+            // Update Row UI
             row.querySelector('.val-p').value = p.toFixed(2);
             row.querySelector('.mtr').value = mtr.toFixed(2);
             row.querySelector('.rowTotal').innerText = rowTot.toFixed(2);
 
-            if(stitch !== 'roller') fabCost += rowTot;
-            if(aster && mtr > 0) asterCost += (mtr * 200);
-            if(trackRate > 0) hwCost += (Math.ceil(w/12) * trackRate);
+            // 2. ACCUMULATE COSTS
+            if (stitch !== 'roller') {
+                fabCost += rowTot; 
+            }
+            if (aster && mtr > 0) {
+                asterCost += (mtr * 200);
+            }
+            if (trackRate > 0) {
+                let rft = Math.ceil(w/12);
+                hwCost += (rft * trackRate);
+            }
         });
 
-        // Box 1 Calculations
+        // 3. UPDATE SUMMARY
         document.getElementById('summ_fabric').innerText = fabCost.toFixed(2);
         document.getElementById('summ_roman_sqft').innerText = romanSqft.toFixed(0);
         document.getElementById('summ_roman_cost').innerText = romanCost.toFixed(2);
         document.getElementById('summ_roller').innerText = rollerCost.toFixed(2);
         document.getElementById('summ_tailor').innerText = tailorCost.toFixed(2);
         document.getElementById('summ_aster').innerText = asterCost.toFixed(2);
+        
         let box1 = fabCost + romanCost + rollerCost + tailorCost + asterCost;
         document.getElementById('box1Total').innerText = box1.toFixed(2);
 
-        // Box 2 Calculations
+        // Services
         let installCost = itemCount * 250;
         let transport = 300;
+        
         document.getElementById('summ_hardware').innerText = hwCost.toFixed(2);
         document.getElementById('summ_items').innerText = itemCount;
         document.getElementById('summ_install').innerText = installCost.toFixed(2);
+        
         let box2 = hwCost + installCost + transport;
         document.getElementById('box2Total').innerText = box2.toFixed(2);
 
         // Grand Total
         let grand = box1 + box2;
         document.getElementById('grandTotal').innerText = grand.toFixed(2);
+        
         let adv = parseFloat(document.getElementById('advance').value) || 0;
         document.getElementById('balance').innerText = (grand - adv).toFixed(2);
-        
-        saveData();
     }
-
-    // --- AUTO SAVE ---
-    function saveData() {
-        const rows = [];
-        document.querySelectorAll('.item-row').forEach(row => {
-            rows.push({
-                space: row.querySelector('.space-sel').value,
-                stitch: row.querySelector('.stitch-sel').value,
-                h: row.querySelector('.val-h').value,
-                w: row.querySelector('.val-w').value,
-                fabric: row.querySelector('.val-fabric').value,
-                aster: row.querySelector('.aster-check').checked,
-                trackName: row.querySelector('.track-name').value,
-                trackRate: row.querySelector('.track-rate').value,
-                rate: row.querySelector('.rate').value,
-                disc: row.querySelector('.disc').value
-            });
-        });
-        localStorage.setItem('hakimi_data', JSON.stringify({
-            custName: document.getElementById('custName').value,
-            custPhone: document.getElementById('custPhone').value,
-            custSite: document.getElementById('custSite').value,
-            advance: document.getElementById('advance').value,
-            rows: rows
-        }));
-    }
-
-    window.onload = function() {
-        if(localStorage.getItem('hakimi_data')) {
-            const saved = JSON.parse(localStorage.getItem('hakimi_data'));
-            document.getElementById('custName').value = saved.custName || '';
-            document.getElementById('custPhone').value = saved.custPhone || '';
-            document.getElementById('custSite').value = saved.custSite || '';
-            document.getElementById('advance').value = saved.advance || 0;
-            if(saved.rows && saved.rows.length > 0) {
-                saved.rows.forEach(r => {
-                    const tr = document.createElement('tr');
-                    tr.className = 'item-row';
-                    tr.innerHTML = createRowHTML();
-                    document.getElementById('items').appendChild(tr);
-                    // Fill values
-                    tr.querySelector('.space-sel').value = r.space;
-                    tr.querySelector('.stitch-sel').value = r.stitch;
-                    tr.querySelector('.val-h').value = r.h;
-                    tr.querySelector('.val-w').value = r.w;
-                    tr.querySelector('.val-fabric').value = r.fabric;
-                    tr.querySelector('.aster-check').checked = r.aster;
-                    tr.querySelector('.track-name').value = r.trackName;
-                    tr.querySelector('.track-rate').value = r.trackRate;
-                    tr.querySelector('.rate').value = r.rate;
-                    tr.querySelector('.disc').value = r.disc;
-                });
-                calculateAll();
-            } else { addRow(); }
-        } else { addRow(); }
-    };
 
     function openWA() {
         let phone = document.getElementById('custPhone').value;
         let grand = document.getElementById('grandTotal').innerText;
-        window.open(`https://wa.me/91${phone}?text=Quotation Total: ₹${grand}`, '_blank');
+        let name = document.getElementById('custName').value;
+        let link = `https://wa.me/91${phone}?text=Hello ${name}, Your Quotation Total is ₹${grand}`;
+        window.open(link, '_blank');
     }
 
-    // --- PDF (SPLIT BOXES) ---
+    // --- ONLY THIS FUNCTION IS UPDATED ---
     function generatePDF() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'pt', 'a4');
+        const doc = new jsPDF('p', 'pt', 'a4'); // PORTRAIT A4
         
-        doc.setFillColor(44, 62, 80); doc.rect(0, 0, 595, 80, 'F');
-        doc.setFontSize(22); doc.setTextColor(255); doc.text("HAKIMI WALLPAPER PUNE", 297, 45, { align: "center" });
-        doc.setFontSize(10); doc.text("Contact: +91 95032 19051", 297, 65, { align: "center" });
+        // 1. HEADER
+        doc.setFillColor(30, 58, 138); 
+        doc.rect(0, 0, 595, 80, 'F');
+        doc.setFontSize(22); doc.setTextColor(255, 255, 255);
+        doc.text("HAKIMI WALLPAPER PUNE", 297, 40, { align: "center" });
+        doc.setFontSize(10); doc.setTextColor(220, 220, 220);
+        doc.text("Contact: +91 95032 19051 | Pune, Maharashtra", 297, 60, { align: "center" });
 
-        doc.setTextColor(0); 
-        doc.text(`Customer: ${document.getElementById('custName').value}`, 40, 100);
+        // 2. CUSTOMER
+        const cName = document.getElementById('custName').value || "Guest";
+        doc.setTextColor(0, 0, 0); 
+        doc.text(`Customer: ${cName}`, 40, 100);
+        doc.text(`Phone: ${document.getElementById('custPhone').value}`, 40, 115);
         doc.text(`Date: ${document.getElementById('currentDate').value}`, 400, 100);
+        doc.text(`Site: ${document.getElementById('custSite').value}`, 400, 115);
 
+        // 3. TABLE BODY
         const body = [];
         document.querySelectorAll('.item-row').forEach(row => {
+            const h = row.querySelector('.val-h').value;
+            const w = row.querySelector('.val-w').value;
+            const size = (h && w) ? `${h}"x${w}"` : "-";
+            const track = row.querySelector('.track-rate').value > 0 ? row.querySelector('.track-name').value : "-";
+            
             body.push([
-                row.querySelector('.space-sel').value,
-                row.querySelector('.stitch-sel').value,
-                row.querySelector('.val-h').value + 'x' + row.querySelector('.val-w').value,
+                row.querySelector('td:nth-child(2) select').value,
+                row.querySelector('.stitch-type').value,
+                size,
                 row.querySelector('.val-fabric').value,
-                row.querySelector('.track-name').value,
+                track,
                 row.querySelector('.mtr').value,
+                row.querySelector('.rate').value,
                 row.querySelector('.rowTotal').innerText
             ]);
         });
 
         doc.autoTable({
-            startY: 120,
-            head: [['Room', 'Stitch', 'Size', 'Fabric', 'Track', 'Mtr', 'Total']],
+            startY: 130,
+            head: [['Room', 'Stitch', 'Size', 'Fabric', 'Track', 'Mtr', 'Rate', 'Total']],
             body: body,
             theme: 'striped',
-            headStyles: { fillColor: [44, 62, 80] }
+            headStyles: { fillColor: [30, 58, 138] },
+            styles: { fontSize: 8, halign: 'center' },
+            columnStyles: { 0: { halign: 'left' }, 3: { halign: 'left' } }
         });
 
-        // SPLIT BOXES IN PDF
-        let y = doc.lastAutoTable.finalY + 20;
-        if(y > 650) { doc.addPage(); y = 40; }
+        // 4. SPLIT SUMMARY BOXES
+        let finalY = doc.lastAutoTable.finalY + 20;
+        if(finalY > 650) { doc.addPage(); finalY = 40; }
 
-        // Box 1
-        doc.rect(40, y, 250, 140);
-        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.text("Product Summary", 50, y+20);
-        doc.setFontSize(9); doc.setFont(undefined, 'normal');
-        doc.text(`Fabric: ${document.getElementById('summ_fabric').innerText}`, 50, y+40);
-        doc.text(`Roman Making: ${document.getElementById('summ_roman_cost').innerText}`, 50, y+55);
-        doc.text(`Roller: ${document.getElementById('summ_roller').innerText}`, 50, y+70);
-        doc.text(`Tailoring: ${document.getElementById('summ_tailor').innerText}`, 50, y+85);
-        doc.text(`Aster: ${document.getElementById('summ_aster').innerText}`, 50, y+100);
-        doc.setFont(undefined, 'bold');
-        doc.text(`Total: ${document.getElementById('box1Total').innerText}`, 50, y+120);
+        // Box 1 (Product) - Left
+        doc.setDrawColor(200); doc.setFillColor(250, 250, 250);
+        doc.rect(40, finalY, 240, 140, 'FD'); 
+        
+        doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.setTextColor(30, 58, 138);
+        doc.text("Product Summary", 50, finalY + 20);
+        
+        doc.setFontSize(9); doc.setFont(undefined, 'normal'); doc.setTextColor(60);
+        let y = finalY + 40;
+        doc.text(`Fabric: ${document.getElementById('summ_fabric').innerText}`, 50, y); y+=14;
+        doc.text(`Roman Making: ${document.getElementById('summ_roman_cost').innerText}`, 50, y); y+=14;
+        doc.text(`Roller: ${document.getElementById('summ_roller').innerText}`, 50, y); y+=14;
+        doc.text(`Tailoring: ${document.getElementById('summ_tailor').innerText}`, 50, y); y+=14;
+        doc.text(`Aster: ${document.getElementById('summ_aster').innerText}`, 50, y); y+=20;
+        
+        doc.setFont(undefined, 'bold'); doc.setTextColor(0);
+        doc.text(`Product Total: ${document.getElementById('box1Total').innerText}`, 50, y);
 
-        // Box 2
-        doc.rect(300, y, 250, 140);
-        doc.text("Services", 310, y+20);
-        doc.setFont(undefined, 'normal');
-        doc.text(`Hardware: ${document.getElementById('summ_hardware').innerText}`, 310, y+40);
-        doc.text(`Installation: ${document.getElementById('summ_install').innerText}`, 310, y+55);
-        doc.text(`Transport: 300.00`, 310, y+70);
-        doc.setFont(undefined, 'bold');
-        doc.text(`Total: ${document.getElementById('box2Total').innerText}`, 310, y+90);
+        // Box 2 (Services) - Right
+        doc.rect(305, finalY, 240, 100, 'FD');
+        doc.setFont(undefined, 'bold'); doc.setTextColor(30, 58, 138);
+        doc.text("Services & Hardware", 315, finalY + 20);
+        
+        doc.setFont(undefined, 'normal'); doc.setTextColor(60);
+        y = finalY + 40;
+        doc.text(`Hardware: ${document.getElementById('summ_hardware').innerText}`, 315, y); y+=14;
+        doc.text(`Installation: ${document.getElementById('summ_install').innerText}`, 315, y); y+=14;
+        doc.text(`Transport: 300.00`, 315, y); y+=20;
+        
+        doc.setFont(undefined, 'bold'); doc.setTextColor(0);
+        doc.text(`Services Total: ${document.getElementById('box2Total').innerText}`, 315, y);
 
-        doc.setFontSize(14); 
-        doc.text(`GRAND TOTAL: ${document.getElementById('grandTotal').innerText}`, 310, y+120);
+        // Grand Total
+        y += 40;
+        doc.setFontSize(14); doc.setTextColor(30, 58, 138);
+        doc.text(`GRAND TOTAL: Rs. ${document.getElementById('grandTotal').innerText}`, 300, y);
+        doc.setTextColor(220, 50, 50);
+        doc.text(`BALANCE DUE: Rs. ${document.getElementById('balance').innerText}`, 300, y+20);
 
-        doc.save('quotation.pdf');
+        doc.save(`Hakimi_Quote_${cName}.pdf`);
     }
+
+    // Init
+    addRow();
 </script>
 </body>
 </html>
