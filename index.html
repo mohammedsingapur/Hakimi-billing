@@ -352,9 +352,9 @@
     // --- ONLY THIS FUNCTION IS UPDATED ---
     function generatePDF() {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF('p', 'pt', 'a4'); // PORTRAIT A4
+        const doc = new jsPDF('p', 'pt', 'a4'); // Portrait
         
-        // 1. HEADER
+        // 1. HEADER (Navy Blue)
         doc.setFillColor(30, 58, 138); 
         doc.rect(0, 0, 595, 80, 'F');
         doc.setFontSize(22); doc.setTextColor(255, 255, 255);
@@ -362,7 +362,7 @@
         doc.setFontSize(10); doc.setTextColor(220, 220, 220);
         doc.text("Contact: +91 95032 19051 | Pune, Maharashtra", 297, 60, { align: "center" });
 
-        // 2. CUSTOMER
+        // 2. CUSTOMER DETAILS
         const cName = document.getElementById('custName').value || "Guest";
         doc.setTextColor(0, 0, 0); 
         doc.text(`Customer: ${cName}`, 40, 100);
@@ -370,43 +370,53 @@
         doc.text(`Date: ${document.getElementById('currentDate').value}`, 400, 100);
         doc.text(`Site: ${document.getElementById('custSite').value}`, 400, 115);
 
-        // 3. TABLE BODY
+        // 3. TABLE DATA (Updated Columns)
         const body = [];
         document.querySelectorAll('.item-row').forEach(row => {
             const h = row.querySelector('.val-h').value;
             const w = row.querySelector('.val-w').value;
-            const size = (h && w) ? `${h}"x${w}"` : "-";
-            const track = row.querySelector('.track-rate').value > 0 ? row.querySelector('.track-name').value : "-";
+            const size = (h && w) ? `${h}" x ${w}"` : "-"; // H x W format
             
+            const tName = row.querySelector('.track-name').value;
+            const tRate = row.querySelector('.track-rate').value;
+            const track = (tRate > 0) ? `${tName} @${tRate}` : "-"; // Name @ Rate format
+
             body.push([
-                row.querySelector('td:nth-child(2) select').value,
-                row.querySelector('.stitch-type').value,
-                size,
-                row.querySelector('.val-fabric').value,
-                track,
-                row.querySelector('.mtr').value,
-                row.querySelector('.rate').value,
-                row.querySelector('.rowTotal').innerText
+                row.querySelector('td:nth-child(2) select').value, // Room
+                row.querySelector('.stitch-type').value,          // Stitch
+                size,                                             // H x W
+                row.querySelector('.val-fabric').value,           // Fabric
+                track,                                            // Track Info
+                row.querySelector('.mtr').value,                  // Mtr
+                row.querySelector('.rate').value,                 // Rate
+                row.querySelector('.disc').value + '%',           // Disc %
+                row.querySelector('.rowTotal').innerText          // Total
             ]);
         });
 
+        // GENERATE TABLE
         doc.autoTable({
             startY: 130,
-            head: [['Room', 'Stitch', 'Size', 'Fabric', 'Track', 'Mtr', 'Rate', 'Total']],
+            head: [['Room', 'Stitch', 'Size (HxW)', 'Fabric', 'Track', 'Mtr', 'Rate', 'Disc%', 'Total']],
             body: body,
             theme: 'striped',
-            headStyles: { fillColor: [30, 58, 138] },
-            styles: { fontSize: 8, halign: 'center' },
-            columnStyles: { 0: { halign: 'left' }, 3: { halign: 'left' } }
+            headStyles: { fillColor: [30, 58, 138] }, // Navy Header
+            styles: { fontSize: 8, halign: 'center', valign: 'middle' },
+            columnStyles: { 
+                0: { halign: 'left', cellWidth: 60 }, // Room
+                3: { halign: 'left', cellWidth: 70 }, // Fabric
+                4: { halign: 'left', cellWidth: 70 }  // Track
+            }
         });
 
-        // 4. SPLIT SUMMARY BOXES
+        // 4. SUMMARY BOXES (Pastel Colors)
         let finalY = doc.lastAutoTable.finalY + 20;
         if(finalY > 650) { doc.addPage(); finalY = 40; }
 
-        // Box 1 (Product) - Left
-        doc.setDrawColor(200); doc.setFillColor(250, 250, 250);
-        doc.rect(40, finalY, 240, 140, 'FD'); 
+        // --- Box 1: Product (Pastel Blue Fill) ---
+        doc.setFillColor(239, 246, 255); // Pastel Blue (RGB: 239, 246, 255)
+        doc.setDrawColor(200, 200, 200); // Light Gray Border
+        doc.rect(40, finalY, 240, 150, 'FD'); // 'FD' = Fill & Draw
         
         doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.setTextColor(30, 58, 138);
         doc.text("Product Summary", 50, finalY + 20);
@@ -422,8 +432,10 @@
         doc.setFont(undefined, 'bold'); doc.setTextColor(0);
         doc.text(`Product Total: ${document.getElementById('box1Total').innerText}`, 50, y);
 
-        // Box 2 (Services) - Right
-        doc.rect(305, finalY, 240, 100, 'FD');
+        // --- Box 2: Services (Pastel Blue Fill) ---
+        doc.setFillColor(239, 246, 255); // Same Pastel Blue
+        doc.rect(305, finalY, 240, 110, 'FD');
+        
         doc.setFont(undefined, 'bold'); doc.setTextColor(30, 58, 138);
         doc.text("Services & Hardware", 315, finalY + 20);
         
@@ -436,11 +448,12 @@
         doc.setFont(undefined, 'bold'); doc.setTextColor(0);
         doc.text(`Services Total: ${document.getElementById('box2Total').innerText}`, 315, y);
 
-        // Grand Total
-        y += 40;
+        // --- Grand Total ---
+        y = finalY + 140; // Position below the boxes
         doc.setFontSize(14); doc.setTextColor(30, 58, 138);
         doc.text(`GRAND TOTAL: Rs. ${document.getElementById('grandTotal').innerText}`, 300, y);
-        doc.setTextColor(220, 50, 50);
+        
+        doc.setTextColor(220, 50, 50); // Red for Balance
         doc.text(`BALANCE DUE: Rs. ${document.getElementById('balance').innerText}`, 300, y+20);
 
         doc.save(`Hakimi_Quote_${cName}.pdf`);
