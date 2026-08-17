@@ -266,7 +266,7 @@
                 sqft = Math.ceil((h*w)/144);
 
                 // 1. CALCULATE MTR & PLEATS
-                if (stitch === 'american') p = Math.ceil(w/24);
+                if (stitch === 'american') p = Math.ceil(w/22);
                 else if (stitch === 'roman') p = Math.ceil(w/46);
                 else if (stitch === 'french') p = Math.ceil(w/19);
                 else if (stitch === 'ring') p = Math.ceil(w/30);
@@ -323,7 +323,7 @@
         document.getElementById('box1Total').innerText = box1.toFixed(2);
 
         // Services
-        let installCost = itemCount * 250;
+        let installCost = itemCount * 300;
         let transport = 300;
         
         document.getElementById('summ_hardware').innerText = hwCost.toFixed(2);
