@@ -496,21 +496,27 @@
             termsY = 40;
         }
 
-        // Draw border box for terms
-        doc.setDrawColor(180);
-        doc.rect(40, termsY, 760, 68);
+                // --- Pin Terms & Conditions to the Bottom of the Page ---
+        const pageHeight = doc.internal.pageSize.getHeight(); // 595.28 pt for A4 Landscape
+        const boxHeight = 68;
+        const termsY = pageHeight - boxHeight - 20; // Exactly 20pt margin from the bottom
 
-        // Header
-        doc.setFontSize(9); 
-        doc.setFont(undefined, 'bold'); 
+        // Draw light gray border box
+        doc.setDrawColor(180);
+        doc.setFillColor(254, 253, 250);
+        doc.rect(40, termsY, 760, boxHeight, 'FD');
+
+        // Heading
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'bold');
         doc.setTextColor(44, 62, 80);
         doc.text("TERMS & CONDITIONS", 50, termsY + 13);
 
-        // List items
-        doc.setFont(undefined, 'normal'); 
-        doc.setFontSize(7.5); 
+        // Term list items
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(7.5);
         doc.setTextColor(70);
-        
+
         const terms = [
             "• Curtain will take 7-9 business days to get ready, after the installation of tracks or price measurement.",
             "• In case double wall brackets are required on site, then the cost of the double wall brackets should be paid to the hardware fitter. (Cost of double wall bracket may vary from track to track)",
@@ -524,6 +530,7 @@
             doc.text(term, 50, lineY);
             lineY += 9.5;
         });
+
 
 
         doc.save(`Hakimi_Quote_${cName}.pdf`);
