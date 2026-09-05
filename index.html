@@ -73,6 +73,28 @@
         
         .total-highlight { font-size: 1.2em; color: var(--danger); font-weight: 800; border-top: 2px solid #ccc; margin-top: 10px; padding-top: 10px; }
         .balance-row { color: var(--success); font-weight: bold; font-size: 1.1em; }
+
+        .terms-section { 
+    background: #fffdfa; 
+    border: 1px solid #e0d6c3; 
+    border-radius: 8px; 
+    padding: 15px 20px; 
+    font-size: 12px; 
+    color: #444; 
+    margin-top: 20px; 
+}
+.terms-section h4 { 
+    margin: 0 0 8px 0; 
+    color: var(--primary); 
+    font-size: 13px; 
+    text-transform: uppercase; 
+}
+.terms-section ul { 
+    margin: 0; 
+    padding-left: 18px; 
+    line-height: 1.6; 
+}
+
     </style>
 </head>
 <body>
@@ -153,6 +175,17 @@
             </div>
         </div>
     </div>
+    <div class="terms-section">
+    <h4>Terms & Conditions</h4>
+    <ul>
+        <li>Curtain will take 7-9 business days to get ready, after the installation of tracks or price measurement.</li>
+        <li>In case double wall brackets are required on site, then the cost of the double wall brackets should be paid to the hardware fitter. (Cost of double wall bracket may vary from track to track)</li>
+        <li>At the time of order confirmation, 100% payment will be required in advance.</li>
+        <li>No changes in fabric can be made, once the order is processed.</li>
+        <li>Material once sold will not be taken back or exchanged.</li>
+    </ul>
+</div>
+
 </div>
 
 <script>
@@ -455,6 +488,43 @@
         
         doc.setTextColor(220, 50, 50); // Red for Balance
         doc.text(`BALANCE DUE: Rs. ${document.getElementById('balance').innerText}`, 300, y+20);
+
+                // Terms & Conditions Block on PDF
+        let termsY = finalY + 120;
+        if (termsY > 500) {
+            doc.addPage();
+            termsY = 40;
+        }
+
+        // Draw border box for terms
+        doc.setDrawColor(180);
+        doc.rect(40, termsY, 760, 68);
+
+        // Header
+        doc.setFontSize(9); 
+        doc.setFont(undefined, 'bold'); 
+        doc.setTextColor(44, 62, 80);
+        doc.text("TERMS & CONDITIONS", 50, termsY + 13);
+
+        // List items
+        doc.setFont(undefined, 'normal'); 
+        doc.setFontSize(7.5); 
+        doc.setTextColor(70);
+        
+        const terms = [
+            "• Curtain will take 7-9 business days to get ready, after the installation of tracks or price measurement.",
+            "• In case double wall brackets are required on site, then the cost of the double wall brackets should be paid to the hardware fitter. (Cost of double wall bracket may vary from track to track)",
+            "• At the time of order confirmation, 100% payment will be required in advance.",
+            "• No changes in fabric can be made, once the order is processed.",
+            "• Material once sold will not be taken back or exchanged."
+        ];
+
+        let lineY = termsY + 24;
+        terms.forEach(term => {
+            doc.text(term, 50, lineY);
+            lineY += 9.5;
+        });
+
 
         doc.save(`Hakimi_Quote_${cName}.pdf`);
     }
