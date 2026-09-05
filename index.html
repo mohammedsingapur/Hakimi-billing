@@ -523,36 +523,52 @@
         }
 
         // Summary Boxes
+                // Summary Boxes
         doc.setDrawColor(44, 62, 80);
-        doc.rect(40, finalY, 360, 110);
-        doc.rect(420, finalY, 380, 110);
 
+        // Top-Left: Product Summary (Full width of left side)
+        doc.rect(40, finalY, 360, 115);
         doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
-        doc.text("Product Summary", 50, finalY + 16);
-        doc.text("Services & Hardware", 430, finalY + 16);
+        doc.text("Product Summary", 50, finalY + 18);
 
         doc.setFont(undefined, 'normal');
         doc.setFontSize(9);
-        doc.text("Fabric Total: Rs " + fabricTotal.toFixed(2), 50, finalY + 34);
-        doc.text("Roman Blind Cost (" + romanSqftTotal.toFixed(2) + " Sqft): Rs " + romanMakingTotal.toFixed(2), 50, finalY + 48);
-        doc.text("Roller/Zebra Cost: Rs " + rollerTotal.toFixed(2), 50, finalY + 62);
-        doc.text("Tailoring (P x 150): Rs " + tailorTotal.toFixed(2), 50, finalY + 76);
-        doc.text("Aster Lining: Rs " + asterTotal.toFixed(2), 50, finalY + 90);
+        doc.text("Fabric Total: Rs " + Math.round(fabricTotal), 50, finalY + 38);
+        doc.text("Roman Blind Cost (" + romanSqftTotal.toFixed(2) + " Sqft): Rs " + Math.round(romanMakingTotal), 50, finalY + 54);
+        doc.text("Roller/Zebra Cost: Rs " + Math.round(rollerTotal), 50, finalY + 70);
+        doc.text("Tailoring (P x 150): Rs " + Math.round(tailorTotal), 50, finalY + 86);
+        doc.text("Aster Lining: Rs " + Math.round(asterTotal), 50, finalY + 102);
 
-        
+        // Top-Right: Services & Hardware
+        doc.rect(420, finalY, 380, 115);
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text("Services & Hardware", 430, finalY + 18);
 
         doc.setFont(undefined, 'normal');
-        doc.text("Hardware Total: Rs " + trackTotal.toFixed(2), 430, finalY + 34);
-        doc.text("Installation (Items x 300): Rs " + installTotal.toFixed(2), 430, finalY + 50);
-        doc.text("Local Transport: Rs " + transport.toFixed(2), 430, finalY + 66);
+        doc.setFontSize(9);
+        doc.text("Hardware Total: Rs " + Math.round(trackTotal), 430, finalY + 38);
+        doc.text("Installation (Items x 250): Rs " + Math.round(installTotal), 430, finalY + 54);
+        doc.text("Local Transport: Rs " + Math.round(transport), 430, finalY + 70);
         doc.setFont(undefined, 'bold');
-        doc.text("Services Total: Rs " + servicesTotal.toFixed(2), 430, finalY + 90);
+        doc.text("Services Total: Rs " + Math.round(servicesTotal), 430, finalY + 95);
+
+        // Bottom-Left (Blue Box area): Payment Summary
+        const paymentY = finalY + 125;
+        doc.setDrawColor(44, 62, 80);
+        doc.rect(40, paymentY, 360, 75);
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text("Payment Summary", 50, paymentY + 18);
 
         doc.setFont(undefined, 'bold');
-        doc.text("Total Amount: Rs " + productTotal.toFixed(2), 220, finalY + 34);
-        doc.text("Advance Paid: Rs " + advance.toFixed(2), 220, finalY + 54);
-        doc.text("Balance Due: Rs " + balanceDue.toFixed(2), 220, finalY + 74);
+        doc.setFontSize(9.5);
+        doc.text("Total Amount: Rs " + Math.round(productTotal), 50, paymentY + 36);
+        doc.text("Advance Paid: Rs " + Math.round(advance), 50, paymentY + 52);
+        doc.text("Balance Due: Rs " + Math.round(balanceDue), 50, paymentY + 68);
+
 
         // Pinned Terms & Conditions at Bottom
         const termsY = 505;
