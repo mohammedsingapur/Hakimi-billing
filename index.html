@@ -383,129 +383,160 @@
     }
 
     // --- ONLY THIS FUNCTION IS UPDATED ---
-        function generatePDF() {
-        try {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'pt', 'a4'); 
+    function generatePDF() {
+    try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('l', 'pt', 'a4');
 
-            // Header
-            doc.setFontSize(20); 
-            doc.setTextColor(44, 62, 80); 
-            doc.setFont(undefined, 'bold');
-            doc.text("HAKIMI WALLPAPER PUNE", 421, 40, { align: "center" });
-            doc.setFontSize(10); 
-            doc.setTextColor(100); 
-            doc.setFont(undefined, 'normal');
-            doc.text("Contact: +91 95032 19051 | Pune, Maharashtra", 421, 56, { align: "center" });
-            doc.line(40, 65, 800, 65);
+        // Safe helper to read values without crashing
+        const getText = (id, fallback = '0.00') => {
+            const el = document.getElementById(id);
+            if (!el) return fallback;
+            return el.innerText !== undefined ? el.innerText.trim() : (el.value || fallback);
+        };
+        const getVal = (id, fallback = '') => {
+            const el = document.getElementById(id);
+            return el ? el.value : fallback;
+        };
 
-            // Customer Info
-            doc.setFontSize(10); 
-            doc.setTextColor(0);
-            doc.text("Customer: " + (document.getElementById('custName').value || ''), 45, 85);
-            doc.text("Phone: " + (document.getElementById('custPhone').value || ''), 280, 85);
-            doc.text("Date: " + (document.getElementById('currentDate').value || ''), 500, 85);
-            doc.text("Site: " + (document.getElementById('custSite').value || ''), 650, 85);
+        // Header
+        doc.setFontSize(20);
+        doc.setTextColor(44, 62, 80);
+        doc.setFont(undefined, 'bold');
+        doc.text("HAKIMI WALLPAPER PUNE", 421, 40, { align: "center" });
+        doc.setFontSize(10);
+        doc.setTextColor(100);
+        doc.setFont(undefined, 'normal');
+        doc.text("Contact: +91 95032 19051 | Pune, Maharashtra", 421, 56, { align: "center" });
+        doc.line(40, 65, 800, 65);
 
-            // Table Data
-            const body = [];
-            document.querySelectorAll('.item-row').forEach(row => {
-                const spaceSelect = row.querySelector('td:nth-child(1) select');
-                const stitchSelect = row.querySelector('.stitch-type');
-                const trackSelect = row.querySelector('.track-type');
+        // Customer Info
+        doc.setFontSize(10);
+        doc.setTextColor(0);
+        doc.text("Customer: " + getVal('custName'), 45, 85);
+        doc.text("Phone: " + getVal('custPhone'), 280, 85);
+        doc.text("Date: " + getVal('currentDate'), 500, 85);
+        doc.text("Site: " + getVal('custSite'), 650, 85);
 
-                body.push([
-                    spaceSelect ? spaceSelect.value : '',
-                    stitchSelect ? stitchSelect.value : '',
-                    row.querySelector('.val-h') ? row.querySelector('.val-h').value : '',
-                    row.querySelector('.val-w') ? row.querySelector('.val-w').value : '',
-                    row.querySelector('.val-p') ? row.querySelector('.val-p').value : '',
-                    row.querySelector('.val-fabric') ? row.querySelector('.val-fabric').value : '',
-                    trackSelect ? trackSelect.options[trackSelect.selectedIndex].text : '',
-                    row.querySelector('.mtr') ? row.querySelector('.mtr').value : '',
-                    row.querySelector('.rate') ? row.querySelector('.rate').value : '',
-                    row.querySelector('.disc') ? row.querySelector('.disc').value : '',
-                    row.querySelector('.rowTotal') ? row.querySelector('.rowTotal').innerText : '0.00'
-                ]);
-            });
+        // Table Data Extraction (safe query selectors)
+        const body = [];
+        document.querySelectorAll('.item-row').forEach(row => {
+            const selectEl = (sel) => {
+                const el = row.querySelector(sel);
+                return el ? el.value : '';
+            };
+            const inputEl = (sel) => {
+                const el = row.querySelector(sel);
+                return el ? el.value : '';
+            };
+            const textEl = (sel) => {
+                const el = row.querySelector(sel);
+                return el ? el.innerText : '0.00';
+            };
 
-            doc.autoTable({
-                startY: 95,
-                head: [['Space', 'Stitch', 'H', 'W', 'P/Sqft', 'Fabric', 'Track', 'Mtr', 'Rate', 'Disc%', 'Total']],
-                body: body,
-                theme: 'grid',
-                headStyles: { fillColor: [44, 62, 80] },
-                styles: { fontSize: 9, halign: 'center', cellPadding: 3 }
-            });
+            const trackSelect = row.querySelector('.track-type') || row.querySelector('select[name="track"]') || row.querySelectorAll('select')[2];
+            const trackText = trackSelect && trackSelect.selectedIndex >= 0 ? trackSelect.options[trackSelect.selectedIndex].text : '';
 
-            let finalY = doc.lastAutoTable.finalY + 12;
+            const rowTotalEl = row.querySelector('.rowTotal') || row.querySelector('span[id*="total"]') || row.querySelector('strong span');
 
-            // Summary Boxes
-            doc.setDrawColor(44, 62, 80);
-            doc.rect(40, finalY, 360, 105);
-            doc.rect(420, finalY, 380, 105);
+            body.push([
+                selectEl('td:nth-child(1) select') || selectEl('select'),
+                selectEl('.stitch-type') || selectEl('select:nth-of-type(2)'),
+                inputEl('.val-h') || inputEl('input[placeholder*="H"]'),
+                inputEl('.val-w') || inputEl('input[placeholder*="W"]'),
+                inputEl('.val-p'),
+                inputEl('.val-fabric') || inputEl('input[type="text"]'),
+                trackText,
+                inputEl('.mtr'),
+                inputEl('.rate'),
+                inputEl('.disc'),
+                rowTotalEl ? rowTotalEl.innerText : '0.00'
+            ]);
+        });
 
-            doc.setFontSize(10); 
-            doc.setFont(undefined, 'bold');
-            doc.text("Product Summary", 50, finalY + 16);
-            doc.text("Services & Hardware", 430, finalY + 16);
+        doc.autoTable({
+            startY: 95,
+            head: [['Space', 'Stitch', 'H', 'W', 'P/Sqft', 'Fabric', 'Track', 'Mtr', 'Rate', 'Disc%', 'Total']],
+            body: body,
+            theme: 'grid',
+            headStyles: { fillColor: [44, 62, 80] },
+            styles: { fontSize: 9, halign: 'center', cellPadding: 3 }
+        });
 
-            doc.setFont(undefined, 'normal'); 
-            doc.setFontSize(9);
-            doc.text("Fabric Total: Rs " + document.getElementById('fabricTotal').innerText, 50, finalY + 32);
-            doc.text("Roman Blind Cost (" + document.getElementById('romanSqft').innerText + " Sqft): Rs " + document.getElementById('romanMaking').innerText, 50, finalY + 46);
-            doc.text("Roller/Zebra Cost: Rs " + document.getElementById('rollerTotal').innerText, 50, finalY + 60);
-            doc.text("Tailoring (P x 150): Rs " + document.getElementById('tailorTotal').innerText, 50, finalY + 74);
-            doc.text("Aster Lining: Rs " + document.getElementById('asterTotalDisplay').innerText, 50, finalY + 88);
+        let finalY = doc.lastAutoTable.finalY + 12;
 
-            doc.setFont(undefined, 'bold');
-            doc.text("Total Amount: Rs " + document.getElementById('box1Total').innerText, 220, finalY + 32);
-            doc.text("Advance Paid: Rs " + (document.getElementById('advance').value || '0'), 220, finalY + 46);
-            doc.text("Balance Due: Rs " + document.getElementById('balance').innerText, 220, finalY + 60);
-
-            doc.setFont(undefined, 'normal');
-            doc.text("Hardware Total: Rs " + document.getElementById('trackTotal').innerText, 430, finalY + 32);
-            doc.text("Installation: Rs " + document.getElementById('installTotal').innerText, 430, finalY + 46);
-            doc.text("Local Transport: Rs 300.00", 430, finalY + 60);
-            doc.setFont(undefined, 'bold');
-            doc.text("Services Total: Rs " + document.getElementById('box2Total').innerText, 430, finalY + 80);
-
-            // --- Pinned Terms & Conditions at Bottom ---
-            const termsY = 505; // Standard bottom position on A4 Landscape (height = 595pt)
-            doc.setDrawColor(180);
-            doc.rect(40, termsY, 760, 68);
-
-            doc.setFontSize(9); 
-            doc.setFont(undefined, 'bold'); 
-            doc.setTextColor(44, 62, 80);
-            doc.text("TERMS & CONDITIONS", 50, termsY + 13);
-
-            doc.setFont(undefined, 'normal'); 
-            doc.setFontSize(7.5); 
-            doc.setTextColor(70);
-
-            const terms = [
-                "- Curtain will take 7-9 business days to get ready, after the installation of tracks or price measurement.",
-                "- In case double wall brackets are required on site, then the cost of the double wall brackets should be paid to the hardware fitter. (Cost of double wall bracket may vary from track to track)",
-                "- At the time of order confirmation, 100% payment will be required in advance.",
-                "- No changes in fabric can be made, once the order is processed.",
-                "- Material once sold will not be taken back or exchanged."
-            ];
-
-            let lineY = termsY + 24;
-            terms.forEach(term => {
-                doc.text(term, 50, lineY);
-                lineY += 9.5;
-            });
-
-            const custName = document.getElementById('custName').value || 'Customer';
-            doc.save("Hakimi_Quote_" + custName + ".pdf");
-
-        } catch (err) {
-            console.error(err);
-            alert("Error generating PDF: " + err.message);
+        // Auto page break if table extends too close to summary area
+        if (finalY > 380) {
+            doc.addPage();
+            finalY = 40;
         }
+
+        // Summary Boxes
+        doc.setDrawColor(44, 62, 80);
+        doc.rect(40, finalY, 360, 105);
+        doc.rect(420, finalY, 380, 105);
+
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text("Product Summary", 50, finalY + 16);
+        doc.text("Services & Hardware", 430, finalY + 16);
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9);
+        doc.text("Fabric Total: Rs " + getText('fabricTotal'), 50, finalY + 32);
+        doc.text("Roman Blind Cost (" + getText('romanSqft', '0') + " Sqft): Rs " + getText('romanMaking'), 50, finalY + 46);
+        doc.text("Roller/Zebra Cost: Rs " + getText('rollerTotal'), 50, finalY + 60);
+        doc.text("Tailoring (P x 150): Rs " + getText('tailorTotal'), 50, finalY + 74);
+        doc.text("Aster Lining: Rs " + (getText('asterTotalDisplay') || getText('asterTotal')), 50, finalY + 88);
+
+        doc.setFont(undefined, 'bold');
+        doc.text("Total Amount: Rs " + (getText('box1Total') || getText('grandTotal')), 220, finalY + 32);
+        doc.text("Advance Paid: Rs " + getVal('advance', '0'), 220, finalY + 46);
+        doc.text("Balance Due: Rs " + getText('balance'), 220, finalY + 60);
+
+        doc.setFont(undefined, 'normal');
+        doc.text("Hardware Total: Rs " + getText('trackTotal'), 430, finalY + 32);
+        doc.text("Installation: Rs " + getText('installTotal'), 430, finalY + 46);
+        doc.text("Local Transport: Rs 300.00", 430, finalY + 60);
+        doc.setFont(undefined, 'bold');
+        doc.text("Services Total: Rs " + (getText('box2Total') || getText('servicesTotal')), 430, finalY + 80);
+
+        // --- Pinned Terms & Conditions at Bottom ---
+        const termsY = 505;
+        doc.setDrawColor(180);
+        doc.rect(40, termsY, 760, 68);
+
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(44, 62, 80);
+        doc.text("TERMS & CONDITIONS", 50, termsY + 13);
+
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(70);
+
+        const terms = [
+            "- Curtain will take 7-9 business days to get ready, after the installation of tracks or price measurement.",
+            "- In case double wall brackets are required on site, then the cost of the double wall brackets should be paid to the hardware fitter. (Cost of double wall bracket may vary from track to track)",
+            "- At the time of order confirmation, 100% payment will be required in advance.",
+            "- No changes in fabric can be made, once the order is processed.",
+            "- Material once sold will not be taken back or exchanged."
+        ];
+
+        let lineY = termsY + 24;
+        terms.forEach(term => {
+            doc.text(term, 50, lineY);
+            lineY += 9.5;
+        });
+
+        const custName = getVal('custName') || 'Customer';
+        doc.save("Hakimi_Quote_" + custName + ".pdf");
+
+    } catch (err) {
+        console.error(err);
+        alert("Error generating PDF: " + err.message);
     }
+}
 
     // Init
     addRow();
