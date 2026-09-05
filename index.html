@@ -540,17 +540,19 @@
         doc.text("Tailoring (P x 150): Rs " + tailorTotal.toFixed(2), 50, finalY + 76);
         doc.text("Aster Lining: Rs " + asterTotal.toFixed(2), 50, finalY + 90);
 
+        
+
+        doc.setFont(undefined, 'normal');
+        doc.text("Hardware Total: Rs " + trackTotal.toFixed(2), 430, finalY + 34);
+        doc.text("Installation (Items x 300): Rs " + installTotal.toFixed(2), 430, finalY + 50);
+        doc.text("Local Transport: Rs " + transport.toFixed(2), 430, finalY + 66);
+        doc.setFont(undefined, 'bold');
+        doc.text("Services Total: Rs " + servicesTotal.toFixed(2), 430, finalY + 90);
+
         doc.setFont(undefined, 'bold');
         doc.text("Total Amount: Rs " + productTotal.toFixed(2), 220, finalY + 34);
         doc.text("Advance Paid: Rs " + advance.toFixed(2), 220, finalY + 54);
         doc.text("Balance Due: Rs " + balanceDue.toFixed(2), 220, finalY + 74);
-
-        doc.setFont(undefined, 'normal');
-        doc.text("Hardware Total: Rs " + trackTotal.toFixed(2), 430, finalY + 34);
-        doc.text("Installation (Items x 250): Rs " + installTotal.toFixed(2), 430, finalY + 50);
-        doc.text("Local Transport: Rs " + transport.toFixed(2), 430, finalY + 66);
-        doc.setFont(undefined, 'bold');
-        doc.text("Services Total: Rs " + servicesTotal.toFixed(2), 430, finalY + 90);
 
         // Pinned Terms & Conditions at Bottom
         const termsY = 505;
