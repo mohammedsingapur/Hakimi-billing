@@ -451,7 +451,7 @@
             let p = 0, mtr = 0, rowTot = 0;
 
             if (h > 0 && w > 0) {
-                if (stitch.includes('american')) p = Math.ceil(w / 24);
+                if (stitch.includes('american')) p = Math.ceil(w / 22);
                 else if (stitch.includes('roman')) p = Math.ceil(w / 46);
                 else if (stitch.includes('french')) p = Math.ceil(w / 19);
                 else if (stitch.includes('ring')) p = Math.ceil(w / 30);
@@ -501,7 +501,7 @@
         const advance = advanceInput ? (parseFloat(advanceInput.value) || 0) : 0;
         const balanceDue = productTotal - advance;
 
-        const installTotal = itemCount * 250;
+        const installTotal = itemCount * 300;
         const transport = 300;
         const servicesTotal = trackTotal + installTotal + transport;
 
@@ -549,7 +549,7 @@
         doc.setFont(undefined, 'normal');
         doc.setFontSize(9);
         doc.text("Hardware Total: Rs " + Math.round(trackTotal), 430, finalY + 38);
-        doc.text("Installation (Items x 250): Rs " + Math.round(installTotal), 430, finalY + 54);
+        doc.text("Installation (Items x 300): Rs " + Math.round(installTotal), 430, finalY + 54);
         doc.text("Local Transport: Rs " + Math.round(transport), 430, finalY + 70);
         doc.setFont(undefined, 'bold');
         doc.text("Services Total: Rs " + Math.round(servicesTotal), 430, finalY + 95);
